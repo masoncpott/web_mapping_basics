@@ -2,4 +2,3 @@
 
 # Notes
     - https://python-visualization.github.io/folium/
-    
