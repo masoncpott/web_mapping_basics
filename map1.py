@@ -4,10 +4,8 @@ import pandas
 ### create map ###
 map1 = folium.Map([45.47001152268444, -122.61397957233314], zoom_start=13, tiles = "Stamen Terrain")
 
-fg = folium.FeatureGroup(name="My Map", overlay=True, control=True, show=True)
-
-folium.Marker([45.47001152268444, -122.61397957233314], popup="<i>My House New</i>").add_to(fg)
-
+feature_group_volcanoes = folium.FeatureGroup(name="Volcano Locations", overlay=True, control=True, show=True)
+feature_group_population = folium.FeatureGroup(name="Population By Country", overlay=True, control=True, show=True)
 
 
 ### process the data from the txt file ###
@@ -42,15 +40,18 @@ for lat, lon, el, name in zip(latitudes, longitudes, elevations, names):
         fill_opacity=0.7, 
         fill=True, 
         fill_color=icon_color(el)
-        ).add_to(fg)
+        ).add_to(feature_group_volcanoes)
 
-fg.add_child(folium.GeoJson(
+feature_group_population.add_child(folium.GeoJson(
     data = open("Webmap_datasources/world.json", 'r', encoding="utf-8-sig").read(),
     style_function = lambda x: {'fillColor':'green' if x['properties']['POP2005'] < 10000000 
         else 'orange' if 10000000 <= x['properties']['POP2005'] < 20000000
         else 'red'}
     ))
 
-map1.add_child(fg)
+
+map1.add_child(feature_group_volcanoes)
+map1.add_child(feature_group_population)
+map1.add_child(folium.LayerControl())
 
 map1.save("Map1.html")
