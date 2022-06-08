@@ -44,7 +44,12 @@ for lat, lon, el, name in zip(latitudes, longitudes, elevations, names):
         fill_color=icon_color(el)
         ).add_to(fg)
 
-fg.add_child(folium.GeoJson(data=open("Webmap_datasources/world.json", 'r', encoding="utf-8-sig").read()))
+fg.add_child(folium.GeoJson(
+    data = open("Webmap_datasources/world.json", 'r', encoding="utf-8-sig").read(),
+    style_function = lambda x: {'fillColor':'green' if x['properties']['POP2005'] < 10000000 
+        else 'orange' if 10000000 <= x['properties']['POP2005'] < 20000000
+        else 'red'}
+    ))
 
 map1.add_child(fg)
 
